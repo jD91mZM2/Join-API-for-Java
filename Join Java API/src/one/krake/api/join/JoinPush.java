@@ -1,28 +1,35 @@
 package one.krake.api.join;
 
 import java.io.IOException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class JoinPush{
-	private static final Parameter senderId = Parameter.forName("senderId");
-	private static final Parameter apiKey = Parameter.forName("apikey");
+	private static final PushParameter deviceId = PushParameter.forName("deviceId");
+	private static final PushParameter deviceIds = PushParameter.forName("deviceIds");
+	private static final PushParameter senderId = PushParameter.forName("senderId");
+	private static final PushParameter apiKey = PushParameter.forName("apikey");
 	
-	private String id = null;
-	private HashMap<Parameter, String> var = new HashMap<>();
+	private HashMap<PushParameter, String> var = new HashMap<>();
 	
 	/**
 	 * Create a new Join message!
 	 * @param recipient The recipient device.
 	 */
 	public JoinPush(String recipient){
-		id = recipient;
+		set(deviceId, recipient);
+	}
+	
+	/**
+	 * Create a new Join message!
+	 * @param recipient The recipient devices.
+	 */
+	public JoinPush(String[] recipient){
+		set(deviceIds, String.join(",", recipient));
 	}
 	
 	/**
@@ -50,63 +57,49 @@ public class JoinPush{
 	 * Add some information to your request.
 	 * JoinPush#set(Parameter.CLIPBOARD, "Hellu")
 	 * will change your devices clipboard to Hellu once you send it.
-	 * @param par The parameter. For example {@link Parameter#TITLE}
+	 * @param par The parameter. For example {@link PushParameter#TITLE}
 	 * @param value The value, for example Hello!
 	 * @return The instance, useful for cleaner code.
 	 */
-	public JoinPush set(Parameter par, String value){
+	public JoinPush set(PushParameter par, String value){
 		var.put(par, value);
 		return this;
 	}
 	
 	/**
-	 * Will do the same thing as {@link JoinPush#set(Parameter, String)},
+	 * Will do the same thing as {@link JoinPush#set(PushParameter, String)},
 	 * but the String will automatically be true.
-	 * Used for things without a value, such as {@link Parameter#FIND} and {@link Parameter#LOCATION}
+	 * Used for things without a value, such as {@link PushParameter#FIND} and {@link PushParameter#LOCATION}
 	 * @param par The parameter. For example Parameter.TITLE
 	 * @return The instance, useful for cleaner code.
 	 */
-	public JoinPush set(Parameter par){
+	public JoinPush set(PushParameter par){
 		return set(par, "true");
 	}
 	
 	/**
-	 * Sends the push.
+	 * Sends the push on the main thread.
 	 * @throws IOException If something went wrong, such as bad internet connection et.c.
 	 * @return The Json that was responded.
 	 */
 	public JsonObject send() throws IOException{
-		String UTF_8 = "UTF-8";
-		
 		StringBuilder url = new StringBuilder("https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush");
-		url.append("?deviceId=" + URLEncoder.encode(id, UTF_8));
-		for(Parameter key : var.keySet())
-			url.append("&" + key.toString() + "=" + URLEncoder.encode(var.get(key), UTF_8));
+		boolean first = true;
+		for(PushParameter key : var.keySet()){
+			url.append(first ? "?" : "&");
+			url.append("&" + key.toString() + "=" + URLEncoder.encode(var.get(key), "UTF-8"));
+			
+			first = false;
+		}
 		
-		String response = makeRequest(url.toString());
+		String response = Join.makeRequest(url.toString());
 		
 		Gson gson = new Gson();
 		JsonObject obj = gson.fromJson(response, JsonElement.class).getAsJsonObject();
 		
 		if(!obj.get("success").getAsBoolean())
-			throw new JoinException(obj.get("errorMessage").getAsString());
+			throw new JoinException(obj);
 		
 		return obj;
-	}
-	
-	private static String makeRequest(String sURL) throws IOException{
-		String response = "";
-		
-		URL url = new URL(sURL);
-		Scanner scan = new Scanner(url.openStream());
-		
-		while(scan.hasNextLine())
-			response += "\n" + scan.nextLine();
-		
-		scan.close();
-		
-		if(response.startsWith("\n"))
-			response = response.substring(1);
-		return response;
 	}
 }
