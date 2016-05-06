@@ -4,7 +4,7 @@ Access the Join API simply via Java
 # Download
 **Important: This API requires GSON.** [Look at the project in Maven](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.google.code.gson%22a%3A%22gson%22)
 
-[Download](http://www.mediafire.com/download/5e0zvf7e46rma41/Join_Java_API.jar)
+[Download](https://github.com/LEGOlord208/Join-API-for-Java/releases/tag/1.0)
 
 ## Documentation
 
