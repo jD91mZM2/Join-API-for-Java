@@ -1,10 +1,10 @@
 package one.krake.api.join;
 
 public class DeviceType{
-	public static DeviceType PHONE = forId(1);
-	public static DeviceType TABLET = forId(2);
-	public static DeviceType CHROME = forId(3);
-	public static DeviceType PC = forId(4);
+	public static final DeviceType PHONE = forId(1);
+	public static final DeviceType TABLET = forId(2);
+	public static final DeviceType CHROME = forId(3);
+	public static final DeviceType PC = forId(4);
 	
 	public static DeviceType forId(int id){
 		return new DeviceType(id);
