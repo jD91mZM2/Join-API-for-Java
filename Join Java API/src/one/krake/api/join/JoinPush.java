@@ -57,6 +57,9 @@ public class JoinPush{
 	 * Add some information to your request.
 	 * JoinPush#set(Parameter.CLIPBOARD, "Hellu")
 	 * will change your devices clipboard to Hellu once you send it.
+	 * 
+	 * <strong>Every Parameter in this API has it's own alias method,
+	 * such as {@link JoinPush#setTitle(String)}</strong>
 	 * @param par The parameter. For example {@link PushParameter#TITLE}
 	 * @param value The value, for example Hello!
 	 * @return The instance, useful for cleaner code.
@@ -66,15 +69,27 @@ public class JoinPush{
 		return this;
 	}
 	
+	public JoinPush setTitle(String value){ return set(PushParameter.TITLE, value); }
+	public JoinPush setText(String value){ return set(PushParameter.TEXT, value); }
+	public JoinPush setIcon(String value){ return set(PushParameter.ICON, value); }
+	public JoinPush setURL(String value){ return set(PushParameter.URL, value); }
+	public JoinPush setClipboard(String value){ return set(PushParameter.CLIPBOARD, value); }
+	public JoinPush setFile(String value){ return set(PushParameter.FILE, value); }
+	public JoinPush setSmsNumber(String value){ return set(PushParameter.SMSNUMBER, value); }
+	public JoinPush setSmsText(String value){ return set(PushParameter.SMSTEXT, value); }
+	public JoinPush setWallpaper(String value){ return set(PushParameter.WALLPAPER, value); }
+	public JoinPush setLocation(boolean value){ return set(PushParameter.LOCATION, value); }
+	public JoinPush setFind(boolean value){ return set(PushParameter.FIND, value); }
+	
 	/**
 	 * Will do the same thing as {@link JoinPush#set(PushParameter, String)},
-	 * but the String will automatically be true.
+	 * but the boolean will be converted automatically.
 	 * Used for things without a value, such as {@link PushParameter#FIND} and {@link PushParameter#LOCATION}
 	 * @param par The parameter. For example Parameter.TITLE
 	 * @return The instance, useful for cleaner code.
 	 */
-	public JoinPush set(PushParameter par){
-		return set(par, "true");
+	public JoinPush set(PushParameter par, boolean value){
+		return set(par, String.valueOf(value));
 	}
 	
 	/**

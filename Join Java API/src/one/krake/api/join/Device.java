@@ -16,12 +16,26 @@ public class Device{
 	
 	/**
 	 * Get a field from the Device.
+	 * 
+	 * <strong>Every Parameter in this API has it's own alias method,
+	 * such as {@link Device#getDeviceType()}</strong>
 	 * @param par The field
 	 * @return The value of the field
 	 */
 	public String get(DeviceParameter par){
 		return fields.get(par.getName());
 	}
+	
+	public String getId(){ return get(DeviceParameter.ID); }
+	public String getRegId(){ return get(DeviceParameter.REG_ID); }
+	public String getUserAccount(){ return get(DeviceParameter.USER_ACCOUNT); }
+	public String getDeviceId(){ return get(DeviceParameter.DEVICE_ID); }
+	public String getDeviceName(){ return get(DeviceParameter.DEVICE_NAME); }
+	public DeviceType getDeviceType(){
+		return DeviceType.forId(Integer.parseInt(get(DeviceParameter.DEVICE_TYPE)));
+	}
+	public String getApiLevel(){ return get(DeviceParameter.API_LEVEL); }
+	public String getModel(){ return get(DeviceParameter.MODEL); }
 	
 	/**
 	 * Check if there is a field with that name.

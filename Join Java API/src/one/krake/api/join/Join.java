@@ -3,7 +3,10 @@ package one.krake.api.join;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -53,5 +56,31 @@ public class Join{
 			devices.add(new Device(e));
 			
 		return devices;
+	}
+	
+	/**
+	 * Get devices sorted by types.
+	 * For example only get phones, not tablets.
+	 * 
+	 * @param filters The deviceTypes
+	 * @return An {@link ArrayList} of {@link Device}s.
+	 * @throws IOException If something went wrong, such as bad internet connection et.c.
+	 */
+	public ArrayList<Device> getDevices(Collection<DeviceType> filter) throws IOException{
+		return getDevices().stream()
+				.filter(d -> filter.contains(d.getDeviceType()))
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
+	
+	/**
+	 * Get devices sorted by types.
+	 * For example only get phones, not tablets.
+	 * 
+	 * @param filters The deviceTypes
+	 * @return An {@link ArrayList} of {@link Device}s.
+	 * @throws IOException If something went wrong, such as bad internet connection et.c.
+	 */
+	public ArrayList<Device> getDevices(DeviceType filter) throws IOException{
+		return getDevices(Arrays.asList(filter));
 	}
 }
