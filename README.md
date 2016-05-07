@@ -56,7 +56,7 @@ How can you send to multiple devices without iterating or something?
 Easy!
 ```
 new JoinPush(new String[]{"YOUR DEVICE ID HERE", "YOUR OTHER DEVICE ID HERE"})
-	.set(PushParameter.FIND)
+	.setFind(true)
 	.send();
 ```
 
