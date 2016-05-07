@@ -25,7 +25,6 @@ package one.krake.api.join.test;
 import java.io.IOException;
 
 import one.krake.api.join.JoinPush;
-import one.krake.api.join.Parameter;
 
 public class JoinTest{
 	public static void main(String[] args) throws IOException{
