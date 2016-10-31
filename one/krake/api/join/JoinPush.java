@@ -158,9 +158,7 @@ public class JoinPush{
 		
 		String result;
 		try{
-			result = Webby.read(
-				link.timestamp().toURL()
-			);
+			result = Webby.get(link.timestamp().toString());
 		}
 		catch(IOException e){
 			handle("Request failed.");

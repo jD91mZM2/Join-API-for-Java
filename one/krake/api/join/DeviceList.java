@@ -52,9 +52,7 @@ public class DeviceList{
 		
 		String result;
 		try{
-			result = Webby.read(
-				url.timestamp().toURL()
-			);
+			result = Webby.get(url.timestamp().toString());
 		}
 		catch(IOException e){
 			e.printStackTrace();
