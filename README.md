@@ -4,9 +4,6 @@ Access the Join API simply via Java
 # Download
 **Important: This API requires [GSON](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.google.code.gson%22a%3A%22gson%22)  and [jWebby](https://krake.one/webby)**
 
-## This API was recently re-written, and might have a bug or two. Or missing feature.
-Just stay with me and report all errors, and everything will work fine!
-
 ## Documentation
 
 Example: Change the clipboard of a device.
