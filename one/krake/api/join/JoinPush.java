@@ -2,6 +2,7 @@ package one.krake.api.join;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -18,6 +19,7 @@ public class JoinPush{
 	private static final Gson gson = new Gson();
 	
 	private ArrayList<String> devices = new ArrayList<>();
+	private ArrayList<String> deviceFilters = new ArrayList<>();
 	
 	private String apiKey = null;
 	private String text = null;
@@ -35,6 +37,7 @@ public class JoinPush{
 	private Consumer<String> error = null;
 	private Consumer<JsonObject> success = null;
 	
+	public JoinPush(){}
 	public JoinPush(String device){
 		addDevice(device);
 	}
@@ -42,24 +45,37 @@ public class JoinPush{
 		addDevices(devices);
 	}
 	
-	public void addDevice(String device){
+	public JoinPush addDevice(String device){
 		devices.add(device);
+		return this;
 	}
-	public void removeDevice(String device){
+	public JoinPush removeDevice(String device){
 		devices.remove(device);
+		return this;
+	}
+	public JoinPush addDeviceFilter(String device){
+		deviceFilters.add(device);
+		return this;
+	}
+	public JoinPush removeDeviceFilter(String device){
+		deviceFilters.remove(device);
+		return this;
 	}
 	
-	public void addDevices(String... devices){
-		for(String device : devices)
-			addDevice(device);
+	public JoinPush addDevices(String... devices){
+		this.devices.addAll(Arrays.asList(devices));
+		return this;
 	}
-	public void removeDevices(String... devices){
-		for(String device : devices)
-			removeDevice(device);
+	public JoinPush removeDevices(String... devices){
+		this.devices.removeAll(Arrays.asList(devices));
+		return this;
 	}
 	
 	public List<String> devices(){
 		return new ArrayList<>(devices);
+	}
+	public List<String> deviceFilters(){
+		return new ArrayList<>(deviceFilters);
 	}
 	
 	public JoinPush setApiKey(String s){ apiKey = s; return this; }
@@ -122,13 +138,18 @@ public class JoinPush{
 		
 		List<String> devices = devices();
 		
-		if(devices.isEmpty())
-			handle("Device list was empty");
-		
-		if(devices.size() == 1)
-			link.add("deviceId", devices.get(0));
-		else
-			link.add("deviceIds", String.join(",", devices));
+		if(deviceFilters.isEmpty()){
+			if(devices.isEmpty()){
+				handle("Device list is empty");
+				return;
+			}
+			
+			if(devices.size() == 1)
+				link.add("deviceId", devices.get(0));
+			else
+				link.add("deviceIds", String.join(",", devices));
+		}
+		else link.add("deviceNames", String.join(",", deviceFilters));
 		
 		String apiKey = this.apiKey;
 		String text = this.text;
@@ -170,13 +191,13 @@ public class JoinPush{
 			json = gson.fromJson(result, JsonElement.class).getAsJsonObject();
 		}
 		catch(JsonSyntaxException | UnsupportedOperationException e){
-			handle("Parsing result failed");
+			handle("Failed receiving response", "Parsing result failed");
 			return;
 		}
 		
 		if(json.get("success").getAsBoolean())
 			success(json);
 		else
-			handle(json.get("errorMessage").getAsString());
+			handle("Failed server-side", json.get("errorMessage").getAsString());
 	}
 }
