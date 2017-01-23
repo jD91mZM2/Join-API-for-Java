@@ -78,7 +78,7 @@ new JoinPush("YOUR DEVICE ID HERE", "YOUR OTHER DEVICE ID HERE")
 	.setFind()
 	.send();
 ```
-(There are also `addDevice` methods)<br />
+(There are also `addDevice` and similar methods)<br />
 By default all requests are sent on a new thread. Both here, and in the a future example coming right up.
 If you want to disable this, just use the sendSync function
 
